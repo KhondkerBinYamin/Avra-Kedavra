@@ -22,44 +22,21 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __GAME_SCENE_H__
-#define __GAME_SCENE_H__
+#include <memory>
 
-#include "cocos2d.h"
-using namespace cocos2d;
+#include <android/log.h>
+#include <jni.h>
 
-class GameScene : public cocos2d::Scene
-{
-public:
-    static cocos2d::Scene* createScene();
+#include "AppDelegate.h"
 
-    virtual bool init();
-    
-    // a selector callback
-	void menuCloseCallback(cocos2d::Ref* pSender);
-	void addMonster(float dt);
-	
-	
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(GameScene);
-	virtual bool onTouchBegan(cocos2d::Touch*, cocos2d::Event*);
-	void Next(Ref *pSender);
+#define  LOG_TAG    "main"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
-	//void Play(Ref *pSender);
-	// void Highscores(Ref *pSender);
-	//void Settings(Ref *pSender);
-	std::vector<Sprite*>boxes;
-	
+namespace {
+std::unique_ptr<AppDelegate> appDelegate;
+}
 
-	int time;
-	void TimeUpdate(float dt);
-private:
-	/*Sprite * box1;
-	Sprite * box2;*/
-private:
-	Label* labelTouchInfo;
-	Label* timeremaining;
-};
-
-#endif // __HELLOWORLD_SCENE_H__
+void cocos_android_app_init(JNIEnv* env) {
+    LOGD("cocos_android_app_init");
+    appDelegate.reset(new AppDelegate());
+}
